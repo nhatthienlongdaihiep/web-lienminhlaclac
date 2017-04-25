@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "nn"
+AuthUserFile "/home/vinhvumo/.htpasswds/public_html/toollm.com/img/bg/passwd"
+require valid-user

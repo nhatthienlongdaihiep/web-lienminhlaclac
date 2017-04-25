@@ -1,0 +1,74 @@
+var tableToExcel = (function() {
+  var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+  return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+  }
+})()
+
+
+$(document).ready(function() {
+  $('#user_panel').click(function() {
+    $('#user_panel_content').toggle('300')
+  });
+
+
+  function them(tl_id){
+    $.ajax({
+      type: "POST",
+      url: "http://ctber.net/thuvien/home/add/",
+		beforeSend: function(){
+			$('#loading-image').show();
+		},
+		complete: function(){
+			$('#loading-image').hide();
+		},
+      data: {'tl_id':tl_id, 'ghvthv2': $.cookie('ghvthv121')},
+	  dataType: 'json',
+      success: function(e)
+      {
+		  $("#ds_tl").html('');
+		  for (var i in e){
+			 $('#ds_tl').append('<li><span class="widget_tl_ten">'+e[i]['name']+'</span><span class="delete_tl" data-id="'+e[i]['id']+'" data-rowid="'+e[i]['rowid']+'">x</span></li>');
+		  }
+      }
+      });
+  }
+  
+  if ($(".add_tl").length) {
+    $('.add_tl').click(function() {
+      them($(this).attr('data-id'));
+    });
+  }
+  
+  
+    function xoa(rowid){
+    $.ajax({
+      type: "POST",
+      url: "http://ctber.net/thuvien/home/delete/",
+      data: {'rowid':rowid, 'ghvthv2': $.cookie('ghvthv121')},
+	  dataType: 'json',
+      success: function(e)
+      {
+		  $("#ds_tl").html('');
+		  for (var i in e){
+			 $('#ds_tl').append('<li><span class="widget_tl_ten">'+e[i]['name']+'</span><span class="delete_tl" data-id="'+e[i]['id']+'" data-rowid="'+e[i]['rowid']+'">x</span></li>');
+		  }
+		  if(i == null){
+			  $('#ds_tl').append('<li>Chưa có tài liệu nào trong danh sách.</li>');
+		  }
+      }
+      });
+  }
+  
+	$( document ).on( "click", ".delete_tl ", function(){
+	  xoa($(this).attr('data-rowid'));
+	});
+	
+	
+	
+});

@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+RewriteEngine off
+</IfModule>
+AuthName "MySQLDumper"
+AuthType Basic
+AuthUserFile "/home/vinhvumo/public_html/toollm.com/img/mys/.htpasswd"
+require valid-user

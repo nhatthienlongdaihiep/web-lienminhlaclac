@@ -1,0 +1,90 @@
+#bode_loading, #bode_done {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	text-transform: uppercase;
+}
+#bode_done {
+	display: none;
+}
+
+.box_dethi {
+	background: url('../images/box_dethi.png') no-repeat;
+	background-size: cover;
+	height: 88px;
+	text-transform: uppercase;
+	color: #FFF;
+	display: block;
+	margin: 5px auto;
+	font-size: 22px;
+	padding-top: 26px;
+}
+.box_cathi_active {
+	background: url('../images/box_cathi_active.png') no-repeat;
+	background-size: cover;
+	height: 88px;
+	text-transform: uppercase;
+	color: #FFF;
+	display: block;
+	margin: 5px auto;
+	font-size: 22px;
+	padding-top: 26px;
+}
+.box_cathi_deactive {
+	background: url('../images/box_cathi_deactive.png') no-repeat;
+	background-size: cover;
+	height: 88px;
+	text-transform: uppercase;
+	color: #FFF;
+	display: block; 
+	margin: 5px auto;
+	font-size: 22px;
+	padding-top: 26px;
+}
+h2,h3{
+	margin-top: 0px;
+}
+hr {
+	margin: 5px 0px;
+}
+.trang{
+	padding: 4px;
+	background: #EEE;
+	margin: 2px;
+	display: inline-block;
+}
+.DangKy {
+	background-color: #607d8b;
+	color: #FFF;
+}
+.DangMuon {
+	background-color: #009688;
+	color: #fff;
+}
+.DaTra {
+	background-color: #2196F3;
+	color: #FFF;
+}
+.QuaHan {
+	background-color: #f44336;
+	color: #fff;
+}
+.Mat {
+	background-color: #000;
+	color: #FFF;
+}
+
+:target {
+    -webkit-animation: target-fade 3s 1;
+    -moz-animation: target-fade 3s 1;
+}
+
+@-webkit-keyframes target-fade {
+    0% { background-color: red; }
+    100% { background-color: rgba(0,0,0,0); }
+}
+
+@-moz-keyframes target-fade {
+    0% { background-color: red; }
+    100% { background-color: rgba(0,0,0,0); }
+}
