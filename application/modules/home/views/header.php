@@ -144,7 +144,7 @@ $cf = $this->iconfig->get();
          <span class="sr-only">Toggle navigation</span> <span class="glyphicon glyphicon-th-list"></button> 
 		
       </div>
-		 <a href="<?=PATH_URL?>" title="Trang chủ" class="navbar-brand"><img src="http://tool24h.com/style/img/logo.png" alt="logo"/></a>
+		 <a href="<?=PATH_URL?>" title="Trang chủ" class="navbar-brand"><img src="./style/img/logo.png" alt="logo"/></a>
          <nav id="bs-navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav ttc_button">
 				<li> <a href="<?php echo ('#');?>" class="btn_naptien">Nạp thẻ</a> </li>
@@ -284,11 +284,11 @@ $cf = $this->iconfig->get();
         </div>
         <div class="modal-body">
           <div class="text-center">
-        <a href="https://www.facebook.com/ninhdeptry" target="_blank"><img src="http://tool24h.com/img/1.png" </br>
+        <a href="https://www.facebook.com/ninhdeptry" target="_blank"><img src="./style/img/1.png" </br>
    </a>
-        <a href="https://www.facebook.com/hung.sociu97" target="_blank"><img src="http://tool24h.com/img/2.png" </br>
+        <a href="https://www.facebook.com/hung.sociu97" target="_blank"><img src="./style/img/2.png" </br>
 </a>  
-        <a href="https://www.facebook.com/thuetool123page" target="_blank"><img src="http://tool24h.com/img/page.png" style="width:271px;height:51px;"> </br>
+        <a href="https://www.facebook.com/thuetool123page" target="_blank"><img src="./style/img/page.png" style="width:271px;height:51px;"> </br>
 </a>  
   </div>
         </div>
@@ -356,11 +356,11 @@ $cf = $this->iconfig->get();
 
 <!-- CHUỘT -->
 <style>
-body a:hover { cursor : url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; }
-textarea { cursor: url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; } 
-select { border-width: 2 2 2 2px; color: #000000; padding: 1 1 1 1px; cursor: url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; } 
-option { cursor: url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; }
-option:focus,option:hover { cursor: url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; }
-input[type="submit"]:hover {cursor: url("http://thantienvxp.xtgem.com/img/cursor/link_1.png"), progress; }
-           html { cursor: url("http://thantienvxp.xtgem.com/img/cursor/bt.png"), progress;}
+body a:hover { cursor : url("./style/img/link_1.png"), progress; }
+textarea { cursor: url("./style/img/link_1.png"), progress; } 
+select { border-width: 2 2 2 2px; color: #000000; padding: 1 1 1 1px; cursor: url("./style/img/link_1.png"), progress; } 
+option { cursor: url("./style/img/link_1.png"), progress; }
+option:focus,option:hover { cursor: url("./style/img/link_1.png"), progress; }
+input[type="submit"]:hover {cursor: url("./style/img/link_1.png"), progress; }
+           html { cursor: url("./style/img/bt.png"), progress;}
 </style>

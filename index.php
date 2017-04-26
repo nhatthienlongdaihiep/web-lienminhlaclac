@@ -200,6 +200,8 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on'){
 	define('PATH_URL', 'http://'.$_SERVER['HTTP_HOST'].FOLDER);
 }
 
+//var_dump( PATH_URL );die;
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
