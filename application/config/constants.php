@@ -15,7 +15,7 @@
 */
 define('SITENAME', 'TOOL24H.COM');
 define('PERPAGE', 800);
-define('ADMINS', '1,2,256');
+define('ADMINS', '1,2,256,257');
 define('BEFORE_TIME', 30);
 define('AFTER_TIME', 15);
 define('FILE_READ_MODE', 0644);

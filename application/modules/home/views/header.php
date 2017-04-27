@@ -144,7 +144,7 @@ $cf = $this->iconfig->get();
          <span class="sr-only">Toggle navigation</span> <span class="glyphicon glyphicon-th-list"></button> 
 		
       </div>
-		 <a href="<?=PATH_URL?>" title="Trang chủ" class="navbar-brand"><img src="./style/img/logo.png" alt="logo"/></a>
+		 <a href="<?=PATH_URL?>" title="Trang chủ" class="navbar-brand"><img src="<?php echo site_url();?>style/img/logo.png" alt="logo"/></a>
          <nav id="bs-navbar" class="collapse navbar-collapse">
          <ul class="nav navbar-nav ttc_button">
 				<li> <a href="<?php echo ('#');?>" class="btn_naptien">Nạp thẻ</a> </li>
