@@ -42,9 +42,19 @@ class Home extends CI_Controller{
 		}
 		$data['tops'] = $this->user->bangxephang(12);
 		$data['title'] = 'Danh sách tài khoản';
+
+		// pr()
+
 		$data['cacgois'] = $this->history->cacgoi();
 		$data['cacgois_dattrc'] = $this->history->cacgoi_dattrc();
 		$data['accs'] = $this->acc->danhsach();
+
+		// pr($data['accs'],1);
+
+		// pr($data['accs']);
+		//Lay ra cac goi dang cho thue
+		$pack = $this->acc->getPackAll();
+		// pr($pack,1);
 		$acc_ids = array();
 		if(!empty($data['accs'])){
 			foreach($data['accs'] AS $k => $acc){
@@ -53,7 +63,14 @@ class Home extends CI_Controller{
 				}
 			}
 		}
-		$data['ready_accs'] = $this->acc->get_acc_ready($acc_ids);
+
+		$ready_accs = $this->acc->get_acc_ready($acc_ids);
+
+		$data['ready_accs'] = $this->filler_accs2($ready_accs, $pack );
+
+		// pr($data['ready_accs'],1);
+		
+		// pr($data['accs'],1);
 		
 		$data['cf'] = $this->iconfig->get();
 		
@@ -68,12 +85,63 @@ class Home extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
+	function filler_accs2($ready_accs, $pack){
+		if(!$ready_accs || !$pack ) return false;
+		$new_ready_accs = array();
+		if( is_array($pack) ){
+			foreach ($pack as $key => $value) {
+				foreach ($ready_accs as $k => $vl) {
+					if($vl->acc_id == $value->acc_id){
+						$vl->time_lv = $value->time_start.' - ' .$value->time_end;
+						$vl->price = $value->price;
+						$vl->pack_id = $value->id;
+
+						$new_ready_accs[] = $vl;
+					}
+				}
+			}
+		}else{
+
+			foreach ($ready_accs as $k => $vl) {
+				if($vl->acc_id == $pack->acc_id){
+					$vl->time_lv = $pack->time_start.' - ' .$pack->time_end;
+					$vl->price = $pack->price;
+					$vl->pack_id = $pack->id;
+
+					$new_ready_accs[] = $vl;
+				}
+			}
+
+		}
+
+		return $new_ready_accs;
+
+		
+	}
+
+	function filler_accs($ready_accs, $pack_ids){
+		if($ready_accs){
+			$new_ready_accs = array();
+			foreach ($ready_accs as $k => $vl) {
+				if( in_array($vl->acc_id, $pack_ids) ){
+
+					// $pack_detail = $this->acc->get_pack_by_id()
+					$vl->time = 1000;
+					$vl->price = 1000;
+
+					$new_ready_accs[] = $vl;
+				}
+			}
+			return $new_ready_accs;
+		}
+		return false;
+	}
 	public function dathue(){
 		$data['cf'] = $this->iconfig->get();
 		if(!empty($this->session->userdata('user_id'))){
 			$data['accs_dangthue'] = $this->history->get_acc_by_user_id($this->session->userdata('user_id'));
 		} else {
-			redirect('');
+			redirect('home');
 		}
 		
 		
@@ -927,6 +995,213 @@ $noidungkm = "Khuyến mại thêm 1h do thuê sáng sớm.";
 				'h_acc_id' => $acc->acc_id,
 				'h_start_time' => $start,
 				'h_stop_time' => $start+$during+$kmdem+$kmsang,
+				'h_price' => $gia,
+				'h_time' => time(),
+				'h_c_id' => $c_id,
+				'h_stt' => $stt,
+				'h_key' => $h_key,
+			);
+			$this->history->h_insert($new_history);
+
+
+			$e['title'] = 'Thành công';
+			if($stt == 'DANGTHUE' AND $start <= time()) {
+				// if($gia >= 10000){
+					// $e['mess'] = 'Mã dự thưởng dự thưởng ngày '.date("d/m/Y", time()).' của bạn là '.substr($new_history['h_time'], -4).'. Tài khoản của bạn là: '.$acc->acc_name.'- mật khẩu: '.$acc->acc_pass.'.';
+				// } else {
+					//$e['mess'] = 'Thuê thành công. Tài khoản của bạn là: '.$acc->acc_name.'- Auth Key: '.$acc->acc_pass.'.';
+					$e['mess'] = 'Thuê thành công! Hãy vào mục đã thuê để xem chi tiết.';
+				//}
+			} else {
+				// if($gia >= 10000){
+					// $e['mess'] = 'Đặt trước thành công! Bạn sẽ nhận được Key chơi được lúc '.date("H:i d/m/Y", $start).'. Mã dự thưởng dự thưởng ngày '.date("d/m/Y", time()).' của bạn là '.substr($new_history['h_time'], -4).'.';
+				// } else {
+					$e['mess'] = 'Đặt trước thành công! Bạn sẽ nhận được Key vào lúc '.date("H:i d/m/Y", $start).'.';
+				//}
+				
+			}
+			$e['stt'] = 'success';
+			echo json_encode($e);
+			exit();
+		}
+		}
+	}
+
+	public function thuengay_new(){
+		if(empty($this->session->userdata('user_id'))){
+			$e['title'] = 'Lỗi';
+			$e['mess'] = 'Vui lòng <a href="'.site_url('home/dangnhap').'">đăng nhập</a> trước khi thuê tài khoản';
+			$e['stt'] = 'error';
+			echo json_encode($e);
+			exit();
+		}
+		
+
+		$user_data = $this->user->get_user_by_id($this->session->userdata('user_id'));
+		$this->form_validation->set_rules('goi_id', 'Goi ID', 'required|xss_clean');
+		$this->form_validation->set_rules('acc_id', 'Acc ID', 'required|xss_clean');
+		$this->form_validation->set_rules('tgian', 'Thoi gian thue', 'xss_clean|numeric');
+
+		if($this->form_validation->run() == FALSE){
+			redirect('home22');
+		} else {
+
+		//Kiem tra goi cho thue co ton tai hay khong
+		$pack = $this->acc->get_pack_by_id( $this->form_validation->set_value('goi_id') );
+		if(!$pack){
+			$e['title'] = 'Lỗi';
+			$e['mess'] = 'Không tồn tại Gói thuê mà bạn vừa yêu cầu.';
+			$e['stt'] = 'error';
+			echo json_encode($e);
+			exit();
+		}
+
+		//Kiem tra acc cho thue co ton tai hay khong
+		$acc = $this->acc->get_acc_by_id( $this->form_validation->set_value('acc_id') );
+
+		if(!$acc){
+			$e['title'] = 'Lỗi';
+			$e['mess'] = 'Không tồn tại tài khoản mà bạn vừa yêu cầu.';
+			$e['stt'] = 'error';
+			echo json_encode($e);
+			exit();
+		}
+
+		$time_lv = $this->acc->get_time_by_id($pack->time_id);
+
+		if(empty($this->form_validation->set_value('tgian'))){
+			// pr('thue ngay',1);
+			//Thue ngay
+			if($acc->acc_stt != "ROI" && $acc->acc_stt != "CHOHWID"){
+				$e['title'] = 'Thất Bại!';
+				$e['mess'] = 'Thật tiếc! tài khoản bạn định thuê đã bị bạn khác vừa ấn thuê nhanh hơn rồi. Vui lòng tải lại trang và thuê lại tài khoản khác nhé.';
+				$e['stt'] = 'error';
+				echo json_encode($e);
+				exit();
+			}
+			
+			$stt = 'DANGTHUE';
+			
+			// $start = max($acc->acc_time_ready, time());
+			$start = strtotime($time_lv->time_start);
+
+			// pr( date('Y-m-d H:i:s',$start) ,1);
+
+		} else {
+			// pr('dat truoc',1);
+			//Dat truoc
+			$accs = $this->acc->danhsach();
+
+			// echo '<pre>';
+			// print_r($accs);
+			// echo '</pre>';
+			// die;
+
+			$acc_muon_dat = $accs[$acc->acc_id];
+			$tgian = $this->form_validation->set_value('tgian');
+			$stop_time = 0;
+			foreach($acc_muon_dat AS $amd){
+				if($amd->h_stop_time > $stop_time){
+					$stop_time = $amd->h_stop_time;
+				}
+			}
+			if($tgian != $stop_time){
+				$e['title'] = 'Thất Bại!';
+				$e['mess'] = 'Thật tiếc! tài khoản bạn định thuê đã bị bạn khác vừa ấn thuê nhanh hơn rồi. Vui lòng tải lại trang và thuê lại tài khoản khác nhé.';
+				$e['stt'] = 'error';
+				echo json_encode($e);
+				exit();
+			} else {
+				$stt = 'DANGCHO';
+				$start = $tgian + AFTER_TIME * 60 + $kmdem + $kmsang;
+			}
+		}
+
+
+		
+			$hour = date("H", $start);
+			$kmdem = 0;
+			$noidungkm = "";
+			if($hour == 22 OR $hour == 23 OR ($hour >= 0 AND $hour < 4))
+			{
+			$kmdem = 2*60*60;
+			$noidungkm = "Khuyến mại thêm 2h do thuê đêm.";
+			}
+
+			$hour = date("H", $start);
+			$kmsang = 0;
+			$noidungkm = "";
+			if($hour >= 4 AND $hour < 10)
+			{
+			$kmsang = 1*60*60;
+			$noidungkm = "Khuyến mại thêm 1h do thuê sáng sớm.";
+			}
+
+
+		
+		// $goi = $this->form_validation->set_value('goi');
+		
+		// if($stt == 'DANGCHO'){
+		// 	$cacgoi = $this->history->cacgoi_dattrc();
+		// } else {
+		// 	$cacgoi = $this->history->cacgoi();
+		// }
+		
+		// if(!isset($cacgoi[$goi])){
+		// 	$e['title'] = 'Lỗi';
+		// 	$e['mess'] = 'Không thể thuê do không tồn tại gói bạn yêu cầu.';
+		// 	$e['stt'] = 'error';
+		// 	echo json_encode($e);
+		// 	exit();
+		// }
+		$goi_thoigian = $this->acc->get_during_by_timeid($pack->time_id);
+		$during = $goi_thoigian*60*60;
+		// $gia =  $cacgoi[$goi]['gia'];
+		
+
+
+		// pr($goi_thoigian,1);
+
+		$gia = $pack->price;
+
+		if($user_data->user_credit < $gia)
+		{
+			$e['title'] = 'Quý khách không đủ tiền!';
+			$e['mess'] = 'Xin lỗi bạn! số tiền cần trả là '.number_format($gia).'đ. Hiện tại bạn chỉ có '.number_format($user_data->user_credit).'đ. Vui lòng nạp thêm nhé!';
+			$e['stt'] = 'error';
+			echo json_encode($e);
+			exit();
+		} else {
+			$update = array('acc_stt' => 'DANGTHUE');
+			$this->acc->acc_update($acc->acc_id, $update);
+
+			//Trừ tiền
+			$new_user_data = array('user_credit' => $user_data->user_credit - $gia, 'user_sogio' => $user_data->user_sogio + $goi_thoigian);
+			$this->user->user_update($user_data->user_id, $new_user_data);
+			
+			//Lưu lịch sử giao dịch
+			$new_credit_log = array(
+				'c_user_id' => $this->session->userdata('user_id'),
+				'c_updown' => 0,
+				'c_amount' => $gia,
+				'c_notice' => 'Trừ tiền thuê tài khoản trong '.$goi_thoigian.' giờ. Thời gian bắt đầu sử dụng: '.date("H:i d/m", $start).'. Tài khoản giảm từ '.number_format($user_data->user_credit).' xuống còn '.number_format($new_user_data['user_credit']).'.',
+				'c_time' => time(),
+				'c_ip' => $this->input->ip_address()
+
+			);
+			$c_id = $this->user->user_credit_insert($new_credit_log);
+			
+			$h_key = $acc->acc_pass;
+
+			// do{
+			// 	$h_key = $this->history->generateRandomString(28);
+			// } while($this->history->get_history_by_h_key($h_key)); 
+			
+			$new_history = array(
+				'h_user_id' => $this->session->userdata('user_id'),
+				'h_acc_id' => $acc->acc_id,
+				'h_start_time' => $start,
+				'h_stop_time' => $start+$during, /* +$kmdem+$kmsang */
 				'h_price' => $gia,
 				'h_time' => time(),
 				'h_c_id' => $c_id,

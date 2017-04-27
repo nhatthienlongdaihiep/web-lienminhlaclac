@@ -109,6 +109,72 @@ class tc extends CI_Controller{
 	}
 	/* END OF TIME MANAGER ====================================================== */
 
+	/* BEGIN OF HIRED MANAGER ================================= */
+	function hired(){
+		$header['title'] = 'Danh sách khung giờ & acc cho thuê';
+		
+		$data['hired'] = $this->acc->getHiredAll();
+		$this->load->view('tc/header', $header);
+		$this->load->view('tc/hired', $data);
+		$this->load->view('tc/footer');
+	}
+	function hired_add(){
+		$header['title'] = 'Thêm khung giờ và acc cho thuê';
+
+		$data['acc'] = $this->acc->get_all();
+		$data['time'] = $this->acc->getTimeLv();
+		
+		$this->form_validation->set_rules('time_id','required');
+		$this->form_validation->set_rules('acc_id','required');
+		$this->form_validation->set_rules('hired_price','required');
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('tc/header', $header);
+			$this->load->view('tc/hired_add', $data);
+			$this->load->view('tc/footer');
+		} else {
+			$new_data['time_id'] = $this->form_validation->set_value('time_id');
+			$new_data['acc_id'] = $this->form_validation->set_value('acc_id');
+			$new_data['price'] = $this->form_validation->set_value('hired_price');
+			$new_data['created'] = date('Y-m-d H:i:s') ;
+			$this->acc->insertHired($new_data);
+			$this->session->set_flashdata('success', 'Lưu thành công!');
+			redirect('tc/hired');
+		}
+	}
+	function hired_edit($id){
+		$data['hired'] = $this->acc->getHiredDetail($id);
+
+		if(!$data['hired']){
+			redirect('tc/hired');
+		}
+
+		$data['acc'] = $this->acc->get_all();
+		$data['time'] = $this->acc->getTimeLv();
+
+		$header['title'] = "Sửa thông tin khung giờ và acc cho thuê";
+		$this->form_validation->set_rules('time_id','required');
+		$this->form_validation->set_rules('acc_id','required');
+		$this->form_validation->set_rules('hired_price','required');
+		if($this->form_validation->run() == FALSE){
+			$this->load->view('tc/header', $header);
+			$this->load->view('tc/hired_edit', $data);
+			$this->load->view('tc/footer');
+		} else {
+			$new_data['time_id'] = $this->form_validation->set_value('time_id');
+			$new_data['acc_id'] = $this->form_validation->set_value('acc_id');
+			$new_data['price'] = $this->form_validation->set_value('hired_price');
+			$this->acc->updateHired($id, $new_data);
+			$this->session->set_flashdata('success', 'Lưu thành công!');
+			redirect('tc/hired/'.$acc_id.'');
+		}
+	}
+	function hired_del($id){
+		$this->acc->delHired($id);
+		$this->session->set_flashdata('success', 'Xóa khung giờ và acc cho thuê thành công.');
+		redirect('tc/hired');
+	}
+	/* END OF HIRED MANAGER ================================= */
+
 	public function tralai($h_id){
 		$history = $this->his->get_history_by_h_id($h_id);
 		if(!$history){

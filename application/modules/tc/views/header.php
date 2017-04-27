@@ -77,6 +77,7 @@
 				-->
 				<li><a href="<?php echo site_url('tc/time_lv');?>"><i class="fa fa-users"></i> Khung giờ</a></li>
 
+				<li><a href="<?php echo site_url('tc/hired');?>"><i class="fa fa-users"></i> DS Cho thuê</a></li>
 				<li><a href="<?php echo site_url('tc/acc');?>"><i class="fa fa-users"></i> Tài khoản</a></li>
 				<li><a href="<?php echo site_url('tc/ass');?>"><i class="fa fa-dashboard"></i> Nick LM</a></li>
 				<li><a href="<?php echo site_url('tc/n_category');?>"><i class="fa fa-dashboard"></i> Danh mục</a></li>

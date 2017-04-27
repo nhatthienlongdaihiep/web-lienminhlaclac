@@ -106,6 +106,7 @@ echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size:
 			echo '<div class="acc_stt">';
 			if($acc->acc_time_ready == 0 || $acc->acc_time_ready <= time()){
 				echo '<div class="ready_acc">Chơi được luôn</div>';
+				echo "<div class='acc_stt'>Khung giờ: $acc->time_lv </div>";
 			} else {
 				echo 'Chờ đổi key: <span class="countdown_time">'.date("m/d/Y H:i:s", $acc->acc_time_ready).'</span>';
                                
@@ -114,14 +115,11 @@ echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size:
 			
 			?>
 			<?php
-			echo form_open('home/thuengay', 'class="ajax_form"');?>
+			echo form_open('home/thuengay_new', 'class="ajax_form"');?>
+			<input type="hidden" name="goi_id" value="<?= $acc->pack_id ?>">
 			<input type="hidden" name="acc_id" value="<?php echo $acc->acc_id;?>" />
 			<select name="goi" class="my_select" required>
-			<?php foreach($cacgois AS $k => $goi) { ?>
-				<option value="<?php echo $k;?>">
-					<?php echo number_format((int)$goi['gia']); echo 'đ/'; echo $goi['ten'];?> &nbsp;&nbsp;
-				</option>
-			<?php } ?>
+				<option value="<?=$acc->price?>"> <?=$acc->price?> </option>
 			</select>
 			<?php
 			if($acc->acc_time_ready == 0 || $acc->acc_time_ready <= time()){
@@ -182,10 +180,10 @@ if($trangthai != ''){
 			}
 $hour = date("H", $acc[count($acc)-1]->h_stop_time+AFTER_TIME*60);
 if($hour == 22 OR $hour == 23 OR ($hour >= 0 AND $hour < 4)){
-echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size: 10.3px">+2 Giờ chơi đêm</div>';
+/* echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size: 10.3px">+2 Giờ chơi đêm</div>'; */
 }
 if($hour >= 4  AND $hour < 10){
-echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size: 10.3px">+1 Giờ chơi sáng</div>';
+/* echo '<div class="pull-right trangthai" style="right:1px; left: auto; font-size: 10.3px">+1 Giờ chơi sáng</div>'; */
 }
 
 			
@@ -209,7 +207,7 @@ echo '</div>';
 					echo form_open('home/giahan', 'class="ajax_form"');
 					echo '<input type="hidden" name="h_id" value="'.$acc[count($acc)-1]->h_id.'" />';
 				} else {
-					echo form_open('home/thuengay', 'class="ajax_form"');
+					echo form_open('home/thuengay_new', 'class="ajax_form"');
 				}
 				?>
 				<input type="hidden" name="acc_id" value="<?php echo $acc[0]->acc_id;?>" />

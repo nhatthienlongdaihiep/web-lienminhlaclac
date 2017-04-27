@@ -85,5 +85,49 @@ class Acc_model extends CI_Model{
 		return array();
 		
 	}
+
+	public function getPackAll(){
+		$this->db->select('h.id,h.time_id,h.acc_id,h.price, t.time_start, t.time_end');
+		$this->db->from('hired as h');
+		$this->db->join('time_lv as t', 't.id = h.time_id');
+		$query = $this->db->get();
+		if($query->num_rows() > 0){
+			return $query->result();
+		}
+		return false;
+	}
+
+	public function get_pack_by_id($pack_id){
+		$this->db->select();
+		$this->db->where('id', $pack_id);
+		$query = $this->db->get('hired');
+		if($query->num_rows() > 0){
+			return $query->row();
+		}
+		return false;
+	}
+
+
+
+	public function get_time_by_id($timeid){
+		$this->db->select();
+		$this->db->where('id',$timeid);
+		$query = $this->db->get('time_lv');
+		if($query->num_rows() > 0){
+			return $query->row();
+		}
+		return false;
+	}
+	public function get_during_by_timeid($timeid){
+		$this->db->select();
+		$this->db->where('id',$timeid);
+		$query = $this->db->get('time_lv');
+		if($query->num_rows() > 0){
+
+			$dur = getTimeDiff($query->row()->time_start, $query->row()->time_end);
+			return date('H', strtotime( $dur ) );
+		}
+		return false;
+	}
 	/* Function v2 */
 }
