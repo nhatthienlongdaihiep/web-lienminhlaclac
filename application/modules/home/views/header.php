@@ -284,11 +284,11 @@ $cf = $this->iconfig->get();
         </div>
         <div class="modal-body">
           <div class="text-center">
-        <a href="https://www.facebook.com/ninhdeptry" target="_blank"><img src="./style/img/1.png" </br>
+        <a href="https://www.facebook.com/ninhdeptry" target="_blank"><img src="<?php echo site_url();?>style/img/1.png" </br>
    </a>
-        <a href="https://www.facebook.com/hung.sociu97" target="_blank"><img src="./style/img/2.png" </br>
+        <a href="https://www.facebook.com/hung.sociu97" target="_blank"><img src="<?php echo site_url();?>style/img/2.png" </br>
 </a>  
-        <a href="https://www.facebook.com/thuetool123page" target="_blank"><img src="./style/img/page.png" style="width:271px;height:51px;"> </br>
+        <a href="https://www.facebook.com/thuetool123page" target="_blank"><img src="<?php echo site_url();?>style/img/page.png" style="width:271px;height:51px;"> </br>
 </a>  
   </div>
         </div>
@@ -356,11 +356,11 @@ $cf = $this->iconfig->get();
 
 <!-- CHUỘT -->
 <style>
-body a:hover { cursor : url("./style/img/link_1.png"), progress; }
-textarea { cursor: url("./style/img/link_1.png"), progress; } 
-select { border-width: 2 2 2 2px; color: #000000; padding: 1 1 1 1px; cursor: url("./style/img/link_1.png"), progress; } 
-option { cursor: url("./style/img/link_1.png"), progress; }
-option:focus,option:hover { cursor: url("./style/img/link_1.png"), progress; }
-input[type="submit"]:hover {cursor: url("./style/img/link_1.png"), progress; }
-           html { cursor: url("./style/img/bt.png"), progress;}
+body a:hover { cursor : url("<?php echo site_url();?>style/img/link_1.png"), progress; }
+textarea { cursor: url("<?php echo site_url();?>style/img/link_1.png"), progress; } 
+select { border-width: 2 2 2 2px; color: #000000; padding: 1 1 1 1px; cursor: url("<?php echo site_url();?>style/img/link_1.png"), progress; } 
+option { cursor: url("<?php echo site_url();?>style/img/link_1.png"), progress; }
+option:focus,option:hover { cursor: url("<?php echo site_url();?>style/img/link_1.png"), progress; }
+input[type="submit"]:hover {cursor: url("<?php echo site_url();?>style/img/link_1.png"), progress; }
+           html { cursor: url("<?php echo site_url();?>style/img/bt.png"), progress;}
 </style>
